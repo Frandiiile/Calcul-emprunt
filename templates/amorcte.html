@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/additional-methods.min.js"></script>
+  <script type= "text/javascript" src="{{url_for('static', filename='script.js')}}"></script>  
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel= "stylesheet" type= "text/css" href= "../static/styles/style.css">
+    <title>wip website</title>
+</head>
+<body>
+    <main>
+        <header>
+            <a href="/" class="logo">calculateur des emprunts</a>
+            <nav class="navigation">
+                <a href="/anncte">calc. annuités cte</a>
+                <a href="/amorcte">calc. amortissement cte</a>
+                <a href="/credits">a propos</a>
+            
+            </nav>    
+        </header>
+        <section class="mainmenu2">
+          <div class="interface">
+            <div class="budget">
+              <label class="head">
+                <div class="clearfix">montant <span class="pull-right"></span></div>
+                <div class="jinput">
+                <input id="montantbox" type="text" class="js-input" name="LoanAmntVal" id="LoanAmntVal" class="text" value="10000" min="5000" max="300000"><p>MAD</p>
+              </div>
+              </label>
+              <div class="borders">
+                <span>5000</span>
+                <span>300000</span>
+              </div>
+              <div class="content">
+                <input id="montant" type="range" class="js-range-slider" min="5000" step="100" max="300000" value="10000" data-rangeslider>
+                <script type="text/javascript">
+                  $('#montant').on('input change', function() {
+                    $('#montantbox').val($(this).val());
+                    onRangeChange('montant');
+                  });
+                  $('#montantbox').keyup(function(e) {
+                    if (e.keyCode == 13) {
+                      if ($(this).val() > $(this).attr('max')*1) {       $(this).val($(this).attr('max'));     }
+                    if ($(this).val() < $(this).attr('min')*1) {       $(this).val($(this).attr('min'));     }
+                      var val = $(this).val().replace(/[^\d.]/g, '');
+                      $('#montant').val(val);
+                      onRangeChange('montant'); 
+                    }                 
+                });
+                </script>
+              </div>
+              <div class="seperateline"></div>
+              <label class="head">
+                <div class="clearfix">taux <span class="pull-right"></span></div>
+                <div class="jinput">
+                <input id="tauxbox" type="text" class="js-input" name="LoanAmntVal" id="LoanAmntVal" class="text" value="0.03" min="0.01" max="0.86"></input><p></p></div>
+              </label>
+              <div class="borders">
+                <span>0.01</span>
+                <span>0.86</span>
+              </div>
+              <div class="content">
+                <input id="taux" type="range" class="js-range-slider" min="0.01" step="0.05" max="0.86" value="0.03" data-rangeslider>
+                <script type="text/javascript">
+                  $('#taux').on('input change', function() {
+                    $('#tauxbox').val($(this).val());
+                    onRangeChange('taux');
+                  });
+                  $('#tauxbox').keyup(function(e) {
+                    if (e.keyCode == 13) {
+                    if ($(this).val() > $(this).attr('max')*1) {       $(this).val($(this).attr('max'));     }
+                    if ($(this).val() < $(this).attr('min')*1) {       $(this).val($(this).attr('min'));     }
+                    if (e.keyCode == 13) {
+                      var val = $(this).val().replace(/[^\d.]/g, '');
+                      $('#taux').val(val);
+                      onRangeChange('taux');
+                     }
+                  }});
+                </script>
+              </div>
+              <div class="seperateline"></div>
+              <label class="head">
+                <div class="clearfix">duree <span class="pull-right"></span></div>
+                <div class="jinput">
+
+                <input id="dureebox" type="text" class="js-input" name="LoanAmntVal" id="LoanAmntVal" class="text" value="12" min="12" max="84"></input>
+                <select id="typeduree" class="cascade">
+                  <option value="1">mois</option>
+                  <option value="4">trimestres</option>
+                  <option value="12">ans</option>
+                </select>
+                  <script type="text/javascript">
+                      $('#typeduree').change(function() {
+                        if  ($("#duree").attr("min")==12){var minduree =0;
+                        var maxduree =0;
+                        var duree=0;
+                        minduree=12/$('#typeduree').val();
+                        maxduree=84/$('#typeduree').val();
+                        duree=$("#duree").val()/$('#typeduree').val();
+                        $("#duree").attr("min",minduree);
+                        $("#duree").attr("max",maxduree);
+                        $("#dureebox").val(Math.ceil(duree));
+                        $("#duree").val(Math.ceil(duree));
+                        document.getElementById("minduree").innerHTML =minduree;
+                        document.getElementById("maxduree").innerHTML =maxduree;
+                        $("#dureebox").attr("min",minduree);
+                        $("#dureebox").attr("max",maxduree);
+                        onRangeChange('duree')}
+                        if  ($("#duree").attr("min")==3){
+                        var minduree =0;
+                        var maxduree =0;
+                        var duree=0;
+                        minduree=12/$('#typeduree').val();
+                        maxduree=84/$('#typeduree').val();
+                        duree=($("#duree").val()*4)/$('#typeduree').val();
+                        $("#duree").attr("min",minduree);
+                        $("#duree").attr("max",maxduree);
+                        $("#dureebox").val(Math.ceil(duree));
+                        $("#duree").val(Math.ceil(duree));
+                        document.getElementById("minduree").innerHTML =minduree;
+                        document.getElementById("maxduree").innerHTML =maxduree;
+                        $("#dureebox").attr("min",minduree);
+                        $("#dureebox").attr("max",maxduree);
+                        onRangeChange('duree')}
+                        if  ($("#duree").attr("min")==1){var minduree =0;
+                        var maxduree =0;
+                        var duree=0;
+                        minduree=12/$('#typeduree').val();
+                        maxduree=84/$('#typeduree').val();
+                        duree=($("#duree").val()*12)/$('#typeduree').val();
+                        $("#duree").attr("min",minduree);
+                        $("#duree").attr("max",maxduree);
+                        $("#dureebox").val(Math.ceil(duree));
+                        $("#duree").val(Math.ceil(duree));
+                        document.getElementById("minduree").innerHTML =minduree;
+                        document.getElementById("maxduree").innerHTML =maxduree;
+                        $("#dureebox").attr("min",minduree);
+                        $("#dureebox").attr("max",maxduree);
+                        onRangeChange('duree');}
+                    } )
+                  </script>
+                </nav>
+              </div>  
+              </label>
+              <div class="borders">
+                <span id="minduree">12</span>
+                <span id="maxduree">84</span>
+              </div>
+              <div class="content">
+                <input id="duree" type="range" class="js-range-slider" min="12" step="1" max="84" value="12" data-rangeslider>
+                <script type="text/javascript">
+                  $('#duree').on('input change', function() {
+                    $('#dureebox').val($(this).val());
+                    onRangeChange('duree');
+                    });
+        
+                  $('#dureebox').keyup(function(e) {
+                    if (e.keyCode == 13) {
+                      if ($(this).val() > $(this).attr('max')*1) {       $(this).val($(this).attr('max'));     }
+                    if ($(this).val() < $(this).attr('min')*1) {       $(this).val($(this).attr('min'));     }
+                      var val = $(this).val().replace(/[^\d.]/g, '');
+                      $('#duree').val(val);
+                      onRangeChange('duree');
+                    }
+                  });
+                </script>
+              </div>
+              <button type="button" id="get" name="button" class="main_button2">Calculer</button>
+              <script type="text/javascript">
+                $(document).ready(function() {
+                  $("#tauxbox").bind("keypress", function(event) {
+                    if (event.charCode != 0) {
+                      var regex = new RegExp("^[0-9. ]+$");
+                      var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                      if (!regex.test(key)) {
+                        event.preventDefault();
+                        return false;
+                      }
+                    }
+                  });
+                  $("#dureebox").bind("keypress", function(event) {
+                    if (event.charCode != 0) {
+                      var regex = new RegExp("^[0-9 ]+$");
+                      var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                      if (!regex.test(key)) {
+                        event.preventDefault();
+                        return false;
+                      }
+                    }
+                  });
+                  $("#montantbox").bind("keypress", function(event) {
+                    if (event.charCode != 0) {
+                      var regex = new RegExp("^[0-9 ]+$");
+                      var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                      if (!regex.test(key)) {
+                        event.preventDefault();
+                        return false;
+                      }
+                    }
+                  });
+                  $("#get").click(function() {
+                    var translate = document.getElementById('popup');
+                    translate.style.transform='translateX('+-645+'px)';
+                    setTimeout(function(){const container = document.getElementById('info');
+                    container.replaceChildren();
+                    var montant = $("#montantbox").val();
+                    var taux = $("#tauxbox").val();
+                    var duree = $("#dureebox").val();
+                    var typeduree = $("#typeduree").val();
+                    var amortissement = montant / duree;
+                    var restant = montant;
+                    var annuite=taux/12;
+                    var minus=0;
+                    var cout=0;
+                    annuite=annuite*typeduree
+                    minus=amortissement*annuite
+                    annuite=annuite*(parseFloat(duree)+parseFloat(1))
+                    annuite=amortissement*(1+annuite)
+                    var table = document.getElementById("info");
+                    var row = table.insertRow(-1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    cell1.innerHTML="";
+                    switch($("#typeduree").val()){
+                        case '1': cell1.innerHTML += "mois";break;
+                        case '4': cell1.innerHTML += "trimestre";break;
+                        case '12': cell1.innerHTML += "an";break;
+                        default: cell1.innerHTML += "mois";break;
+                    };
+                    cell2.innerHTML ="";
+                    switch($("#typeduree").val()){
+                        case '1': cell2.innerHTML += "mensualite";break;
+                        case '4': cell2.innerHTML += "trimestrialite";break;
+                        case '12': cell2.innerHTML += "annuite";break;
+                        default: cell2.innerHTML += "mensualite";break;
+                    };
+                    cell3.innerHTML = "restant";
+                    for (let annee = 1; annee <= duree; annee++) {
+                      annuite = parseFloat(annuite)-parseFloat(minus);
+                      annuite=annuite.toFixed(2);
+                      cout=parseFloat(cout)+parseFloat(annuite)
+                      restant -= amortissement;
+                      restant = parseFloat(restant).toFixed(2);
+                      var ttable = document.getElementById("info");
+                      var rrow = table.insertRow(-1);
+                      var ccell1 = rrow.insertCell(0);
+                      var ccell2 = rrow.insertCell(1);
+                      var ccell3 = rrow.insertCell(2);
+                      ccell1.innerHTML = annee;
+                      ccell2.innerHTML = annuite;
+                      ccell3.innerHTML = restant;
+                    }
+                    cout=parseFloat(cout)-parseFloat(montant);
+                    document.getElementById("credit").innerHTML =cout.toFixed(2);
+                    translate.style.transform='translateX('+-20+'px)';},500);
+                    
+                    
+                    
+                  });
+                });
+              </script>
+            </div>
+            </div>
+          </div>
+          <div class="popup" id="popup">
+            <div class="mainpopup">
+                <div class="coutcredit"><div>cout de credit:</div><div id="credit">...</div><div2>  DH*</div2><sup>*hors TVA et frais de dossier</div>
+                <table id="info" class="content-table">
+                </table>
+        </div>
+        </section>
+
+    </main>
+
+  </body>
+
+  
+</html

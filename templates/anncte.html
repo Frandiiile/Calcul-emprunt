@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script type= "text/javascript" src="{{url_for('static', filename='script.js')}}"></script>  
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel= "stylesheet" type= "text/css" href= "../static/styles/style.css">
+    <title>wip website</title>
+</head>
+<body>
+    <main>
+        <header>
+            <a href="/" class="logo">calculateur des emprunts</a>
+            <nav class="navigation">
+                <a href="/anncte">calc. annuités cte</a>
+                <a href="/amorcte">calc. amortissement cte</a>
+                <a href="/credits">a propos</a>
+            
+            </nav>    
+        </header>
+        <section class="mainmenu2">
+          <div class="interface">
+            <div class="budget">
+              <label class="head">
+                <div class="clearfix">montant <span class="pull-right"></span></div>
+                <div class="jinput">
+                <input id="montantbox" type="text" class="js-input" name="LoanAmntVal"  class="text" value="10000" min="5000" max="300000" ><p>MAD</p>
+              </div>
+              </label>
+              <div class="borders">
+                <span>5000</span>
+                <span>300000</span>
+              </div>
+              <div class="content">
+                <input id="montant" type="range" class="js-range-slider" min="5000" step="100" max="300000" value="10000" data-rangeslider>
+                <script type="text/javascript">
+                  $('#montant').on('input change', function() {
+                    $('#montantbox').val($(this).val());
+                    onRangeChange('montant');
+                    var sum=0;
+                    var minsum=0;
+                    var maxsum=0;
+                    var sum2=0;
+                    sum+= +$('#montantbox').val()*$('#tauxbox').val();
+                    sum=sum/12;
+                    sum=sum*$('#typeduree').val();
+                    sum2=$('#tauxbox').val()/12;
+                    sum2=sum2*$('#typeduree').val()
+                    sum2=parseFloat('1')+parseFloat(sum2);
+                    minsum=Math.pow(sum2,84/$('#typeduree').val())
+                    maxsum=Math.pow(sum2,12/$('#typeduree').val())
+                    sum2=Math.pow(sum2,$('#dureebox').val())
+                    sum2=1/sum2;
+                    minsum=1/minsum
+                    maxsum=1/maxsum
+                    sum2=parseFloat('1')-parseFloat(sum2)
+                    minsum=parseFloat('1')-parseFloat(minsum)
+                    maxsum=parseFloat('1')-parseFloat(maxsum)
+                    minsum=sum/minsum
+                    maxsum=sum/maxsum
+                    sum=sum/sum2
+                    sum=round_up(sum,2);
+                    minsum=round_up(minsum,2);
+                    maxsum=round_up(maxsum,2)
+                    $("#annuite").attr("min",minsum);
+                    $("#annuite").attr("max",maxsum);
+                    $("#annuitebox").attr("min",minsum);
+                    $("#annuitebox").attr("max",maxsum);
+                    $('#annuitebox').val(sum);
+                    $('#annuite').val(sum);
+                    document.getElementById("minannuite").innerHTML =minsum;
+                    document.getElementById("maxannuite").innerHTML =maxsum;
+                    document.getElementById("annuitevalue").innerHTML =sum;
+                    document.getElementById("credit").innerHTML =($("#annuitebox").val()*$("#dureebox").val()-$("#montantbox").val()).toFixed(2);
+                    onRangeChange('annuite');
+
+                  });
+                  $('#montantbox').keyup(function(e) {
+                    
+                    if (e.keyCode == 13) {
+                      if ($(this).val() > $(this).attr('max')*1) {       $(this).val($(this).attr('max'));     }
+                    if ($(this).val() < $(this).attr('min')*1) {       $(this).val($(this).attr('min'));     }
+                      var val = $(this).val().replace(/[^\d.]/g, '');
+                      $('#montant').val(val);
+                      onRangeChange('montant');
+                      var sum=0;
+                    var minsum=0;
+                    var maxsum=0;
+                    var sum2=0;
+                    sum+= +$('#montantbox').val()*$('#tauxbox').val();
+                    sum=sum/12;
+                    sum=sum*$('#typeduree').val();
+                    sum2=$('#tauxbox').val()/12;
+                    sum2=sum2*$('#typeduree').val()
+                    sum2=parseFloat('1')+parseFloat(sum2);
+                    minsum=Math.pow(sum2,84/$('#typeduree').val())
+                    maxsum=Math.pow(sum2,12/$('#typeduree').val())
+                    sum2=Math.pow(sum2,$('#dureebox').val())
+                    sum2=1/sum2;
+                    minsum=1/minsum
+                    maxsum=1/maxsum
+                    sum2=parseFloat('1')-parseFloat(sum2)
+                    minsum=parseFloat('1')-parseFloat(minsum)
+                    maxsum=parseFloat('1')-parseFloat(maxsum)
+                    minsum=sum/minsum
+                    maxsum=sum/maxsum
+                    sum=sum/sum2
+                    sum=round_up(sum,2);
+                    minsum=round_up(minsum,2);
+                    maxsum=round_up(maxsum,2)
+                    $("#annuite").attr("min",minsum);
+                    $("#annuite").attr("max",maxsum);
+                    $("#annuitebox").attr("min",minsum);
+                    $("#annuitebox").attr("max",maxsum);
+                    $('#annuitebox').val(sum);
+                    $('#annuite').val(sum);
+                    document.getElementById("minannuite").innerHTML =minsum;
+                    document.getElementById("maxannuite").innerHTML =maxsum;
+                    document.getElementById("annuitevalue").innerHTML =sum;
+                    document.getElementById("credit").innerHTML =($("#annuitebox").val()*$("#dureebox").val()-$("#montantbox").val()).toFixed(2);
+                    onRangeChange('annuite')}
+                  });
+                </script>
+              </div>
+              <div class="seperateline"></div>
+              <label class="head">
+                <div class="clearfix">taux <span class="pull-right"></span></div>
+                <div class="jinput">
+                <input id="tauxbox" type="text" class="js-input" name="LoanAmntVal" id="LoanAmntVal" class="text" value="0.03" min="0.01" max="0.86"></input><p></p></div>
+              </label>
+              <div class="borders">
+                <span>0.01</span>
+                <span>0.86</span>
+              </div>
+              <div class="content">
+                <input id="taux" type="range" class="js-range-slider" min="0.01" step="0.01" max="0.86" value="0.03" data-rangeslider>
+                <script type="text/javascript">
+                  $('#taux').on('input change', function() {
+                    $('#tauxbox').val($(this).val());
+                    onRangeChange('taux');
+                    var sum=0;
+                    var minsum=0;
+                    var maxsum=0;
+                    var sum2=0;
+                    sum+= +$('#montantbox').val()*$('#tauxbox').val();
+                    sum=sum/12;
+                    sum=sum*$('#typeduree').val();
+                    sum2=$('#tauxbox').val()/12;
+                    sum2=sum2*$('#typeduree').val()
+                    sum2=parseFloat('1')+parseFloat(sum2);
+                    minsum=Math.pow(sum2,84/$('#typeduree').val())
+                    maxsum=Math.pow(sum2,12/$('#typeduree').val())
+                    sum2=Math.pow(sum2,$('#dureebox').val())
+                    sum2=1/sum2;
+                    minsum=1/minsum
+                    maxsum=1/maxsum
+                    sum2=parseFloat('1')-parseFloat(sum2)
+                    minsum=parseFloat('1')-parseFloat(minsum)
+                    maxsum=parseFloat('1')-parseFloat(maxsum)
+                    minsum=sum/minsum
+                    maxsum=sum/maxsum
+                    sum=sum/sum2
+                    sum=round_up(sum,2);
+                    minsum=round_up(minsum ,2);
+                    maxsum=round_up(maxsum ,2)
+                    $("#annuite").attr("min",minsum);
+                    $("#annuite").attr("max",maxsum);
+                    $("#annuitebox").attr("min",minsum);
+                    $("#annuitebox").attr("max",maxsum);
+                    $('#annuitebox').val(sum);
+                    $('#annuite').val(sum);
+                    onRangeChange('annuite');
+                    document.getElementById("minannuite").innerHTML =minsum;
+                    document.getElementById("maxannuite").innerHTML =maxsum;
+                    document.getElementById("annuitevalue").innerHTML =sum;
+                    document.getElementById("credit").innerHTML =($("#annuitebox").val()*$("#dureebox").val()-$("#montantbox").val()).toFixed(2);
+                  });
+        
+                  $('#tauxbox').keyup(function(e) {
+                    if (e.keyCode == 13) {
+                      if ($(this).val() > $(this).attr('max')*1) {       $(this).val($(this).attr('max'));     }
+                    if ($(this).val() < $(this).attr('min')*1) {       $(this).val($(this).attr('min'));     }
+                      var val = $(this).val().replace(/[^\d.]/g, '');
+                      $('#taux').val(val);
+                      onRangeChange('taux');
+                      var sum=0;
+                    var minsum=0;
+                    var maxsum=0;
+                    var sum2=0;
+                    sum+= +$('#montantbox').val()*$('#tauxbox').val();
+                    sum=sum/12;
+                    sum=sum*$('#typeduree').val();
+                    sum2=$('#tauxbox').val()/12;
+                    sum2=sum2*$('#typeduree').val()
+                    sum2=parseFloat('1')+parseFloat(sum2);
+                    minsum=Math.pow(sum2,84/$('#typeduree').val())
+                    maxsum=Math.pow(sum2,12/$('#typeduree').val())
+                    sum2=Math.pow(sum2,$('#dureebox').val())
+                    sum2=1/sum2;
+                    minsum=1/minsum
+                    maxsum=1/maxsum
+                    sum2=parseFloat('1')-parseFloat(sum2)
+                    minsum=parseFloat('1')-parseFloat(minsum)
+                    maxsum=parseFloat('1')-parseFloat(maxsum)
+                    minsum=sum/minsum
+                    maxsum=sum/maxsum
+                    sum=sum/sum2
+                    sum=round_up(sum,2);
+                    minsum=round_up(minsum ,2);
+                    maxsum=round_up(maxsum ,2)
+                    $("#annuite").attr("min",minsum);
+                    $("#annuite").attr("max",maxsum);
+                    $("#annuitebox").attr("min",minsum);
+                    $("#annuitebox").attr("max",maxsum);
+                    $('#annuitebox').val(sum);
+                    $('#annuite').val(sum);
+                    onRangeChange('annuite');
+                    document.getElementById("minannuite").innerHTML =minsum;
+                    document.getElementById("maxannuite").innerHTML =maxsum;
+                    document.getElementById("annuitevalue").innerHTML =sum;
+                    document.getElementById("credit").innerHTML =($("#annuitebox").val()*$("#dureebox").val()-$("#montantbox").val()).toFixed(2);}
+                  });
+                </script>
+              </div>
+              <div class="seperateline"></div>
+              <label class="head">
+                <div class="clearfix">duree <span class="pull-right"></span></div>
+                <div class="jinput">
+
+                <input id="dureebox" type="text" class="js-input" name="LoanAmntVal" id="LoanAmntVal" class="text" value="12" min="12" max="84"></input>
+                <select id="typeduree" class="cascade">
+                  <option value="1">mois</option>
+                  <option value="4">trimestres</option>
+                  <option value="12">ans</option>
+                </select>
+                  <script type="text/javascript">
+                      $('#typeduree').change(function() {
+                        if  ($("#duree").attr("min")==12){var minduree =0;
+                        var maxduree =0;
+                        var duree=0;
+                        minduree=12/$('#typeduree').val();
+                        maxduree=84/$('#typeduree').val();
+                        duree=$("#duree").val()/$('#typeduree').val();
+                        $("#duree").attr("min",minduree);
+                        $("#duree").attr("max",maxduree);
+                        $("#dureebox").val(Math.ceil(duree));
+                        $("#duree").val(Math.ceil(duree));
+                        document.getElementById("minduree").innerHTML =minduree;
+                        document.getElementById("maxduree").innerHTML =maxduree;
+                        $("#dureebox").attr("min",minduree);
+                        $("#dureebox").attr("max",maxduree);
+                        onRangeChange('duree')}
+                        if  ($("#duree").attr("min")==3){
+                        var minduree =0;
+                        var maxduree =0;
+                        var duree=0;
+                        minduree=12/$('#typeduree').val();
+                        maxduree=84/$('#typeduree').val();
+                        duree=($("#duree").val()*4)/$('#typeduree').val();
+                        $("#duree").attr("min",minduree);
+                        $("#duree").attr("max",maxduree);
+                        $("#dureebox").val(Math.ceil(duree));
+                        $("#duree").val(Math.ceil(duree));
+                        document.getElementById("minduree").innerHTML =minduree;
+                        document.getElementById("maxduree").innerHTML =maxduree;
+                        $("#dureebox").attr("min",minduree);
+                        $("#dureebox").attr("max",maxduree);
+                        onRangeChange('duree')}
+                        if  ($("#duree").attr("min")==1){var minduree =0;
+                        var maxduree =0;
+                        var duree=0;
+                        minduree=12/$('#typeduree').val();
+                        maxduree=84/$('#typeduree').val();
+                        duree=($("#duree").val()*12)/$('#typeduree').val();
+                        $("#duree").attr("min",minduree);
+                        $("#duree").attr("max",maxduree);
+                        $("#dureebox").val(Math.ceil(duree));
+                        $("#duree").val(Math.ceil(duree));
+                        document.getElementById("minduree").innerHTML =minduree;
+                        document.getElementById("maxduree").innerHTML =maxduree;
+                        $("#dureebox").attr("min",minduree);
+                        $("#dureebox").attr("max",maxduree);
+                        onRangeChange('duree');}
+                        if(minduree==12){
+                            document.getElementById("typedureetext").innerHTML ='mensualite';
+                            document.getElementById("typedureetext2").innerHTML ='mensualite';
+                          }
+                        else{
+                          if(minduree==3){
+                            document.getElementById("typedureetext").innerHTML ='trimestrialite';
+                            document.getElementById("typedureetext2").innerHTML ='trimestrialite';
+                          }
+                          else{
+                            document.getElementById("typedureetext").innerHTML ='annuite';
+                            document.getElementById("typedureetext2").innerHTML ='annuite';
+                          }
+                          }
+                    var sum=0;      
+                    var minsum=0;
+                    var maxsum=0;
+                    var sum2=0;
+                    sum+= +$('#montantbox').val()*$('#tauxbox').val();
+                    sum=sum/12;
+                    sum=sum*$('#typeduree').val();
+                    sum2=$('#tauxbox').val()/12;
+                    sum2=sum2*$('#typeduree').val()
+                    sum2=parseFloat('1')+parseFloat(sum2);
+                    minsum=Math.pow(sum2,84/$('#typeduree').val())
+                    maxsum=Math.pow(sum2,12/$('#typeduree').val())
+                    sum2=Math.pow(sum2,$('#dureebox').val())
+                    sum2=1/sum2;
+                    minsum=1/minsum
+                    maxsum=1/maxsum
+                    sum2=parseFloat('1')-parseFloat(sum2)
+                    minsum=parseFloat('1')-parseFloat(minsum)
+                    maxsum=parseFloat('1')-parseFloat(maxsum)
+                    minsum=sum/minsum
+                    maxsum=sum/maxsum
+                    sum=sum/sum2
+                    sum=round_up(sum,2);
+                    minsum=round_up(minsum,2)
+                    maxsum=round_up(maxsum,2)
+                    $("#annuite").attr("min",minsum);
+                    $("#annuite").attr("max",maxsum);
+                    $("#annuitebox").attr("min",minsum);
+                    $("#annuitebox").attr("max",maxsum);
+                    $('#annuitebox').val(sum);
+                    $('#annuite').val(sum);
+                    onRangeChange('annuite');
+                    document.getElementById("minannuite").innerHTML =minsum;
+                    document.getElementById("maxannuite").innerHTML =maxsum;
+                    document.getElementById("annuitevalue").innerHTML =sum;
+                    document.getElementById("credit").innerHTML =($("#annuitebox").val()*$("#dureebox").val()-$("#montantbox").val()).toFixed(2);  
+                  } )
+                  </script>
+                </nav>
+              </div>  
+              </label>
+              <div class="borders">
+                <span id="minduree">12</span>
+                <span id="maxduree">84</span>
+              </div>
+              <div class="content">
+                <input id="duree" type="range" class="js-range-slider" min="12" step="1" max="84" value="12" data-rangeslider>
+                <script type="text/javascript">
+                  $('#duree').on('input change', function() {
+                    $('#dureebox').val($(this).val());
+                    onRangeChange('duree');
+                    var sum=0;
+                      var sum2=0;
+                    sum+= +$('#montantbox').val()*$('#tauxbox').val();
+                    sum=sum/12;
+                    sum=sum*$('#typeduree').val();
+                    sum2=$('#tauxbox').val()/12;
+                    sum2=sum2*$('#typeduree').val()
+                    sum2=parseFloat('1')+parseFloat(sum2);
+                    sum2=Math.pow(sum2,$('#dureebox').val())
+                    sum2=1/sum2;
+                    sum2=parseFloat('1')-parseFloat(sum2)
+                    sum=sum/sum2
+                    sum=round_up(sum,2);
+                    
+                    $('#annuitebox').val(sum);
+                    $('#annuite').val(sum);
+                    onRangeChange('annuite');
+                    document.getElementById("annuitevalue").innerHTML =sum;
+                    document.getElementById("credit").innerHTML =($("#annuitebox").val()*$("#dureebox").val()-$("#montantbox").val()).toFixed(2);
+                  });
+        
+                  $('#dureebox').keyup(function(e) {
+                    if (e.keyCode == 13) {
+                      if ($(this).val() > $(this).attr('max')*1) {       $(this).val($(this).attr('max'));     }
+                    if ($(this).val() < $(this).attr('min')*1) {       $(this).val($(this).attr('min'));     }
+                      var val = $(this).val().replace(/[^\d.]/g, '');
+                      $('#duree').val(val);
+                      onRangeChange('duree');
+                      var sum=0;      
+                    var minsum=0;
+                    var maxsum=0;
+                    var sum2=0;
+                    sum+= +$('#montantbox').val()*$('#tauxbox').val();
+                    sum=sum/12;
+                    sum=sum*$('#typeduree').val();
+                    sum2=$('#tauxbox').val()/12;
+                    sum2=sum2*$('#typeduree').val()
+                    sum2=parseFloat('1')+parseFloat(sum2);
+                    minsum=Math.pow(sum2,84/$('#typeduree').val())
+                    maxsum=Math.pow(sum2,12/$('#typeduree').val())
+                    sum2=Math.pow(sum2,$('#dureebox').val())
+                    sum2=1/sum2;
+                    minsum=1/minsum
+                    maxsum=1/maxsum
+                    sum2=parseFloat('1')-parseFloat(sum2)
+                    minsum=parseFloat('1')-parseFloat(minsum)
+                    maxsum=parseFloat('1')-parseFloat(maxsum)
+                    minsum=sum/minsum
+                    maxsum=sum/maxsum
+                    sum=sum/sum2
+                    sum=round_up(sum,2);
+                    minsum=round_up(minsum,2)
+                    maxsum=round_up(maxsum,2)
+                    $("#annuite").attr("min",minsum);
+                    $("#annuite").attr("max",maxsum);
+                    $("#annuitebox").attr("min",minsum);
+                    $("#annuitebox").attr("max",maxsum);
+                    $('#annuitebox').val(sum);
+                    $('#annuite').val(sum);
+                    onRangeChange('annuite');
+                    document.getElementById("minannuite").innerHTML =minsum;
+                    document.getElementById("maxannuite").innerHTML =maxsum;
+                    document.getElementById("annuitevalue").innerHTML =sum;
+                    document.getElementById("credit").innerHTML =($("#annuitebox").val()*$("#dureebox").val()-$("#montantbox").val()).toFixed(2);  
+                  }
+                  });
+                </script>
+              </div>
+              <div class="seperateline"></div>
+              <label class="head">
+                <div class="clearfix" id="typedureetext2">mensualite<span class="pull-right"></span></div>
+                <div class="jinput">
+                <input id="annuitebox" type="text" class="js-input" name="LoanAmntVal" id="LoanAmntVal" class="text" value="846.94" min="132.14" max="846.94"></input><p>MAD</p>
+              </div>
+            </label>
+            <div class="borders">
+                  <span id="minannuite">132.14</span>
+                  <span id="maxannuite">846.94</span>
+            </div> 
+            <div class="content">
+                <input id="annuite" type="range" class="js-range-slider" min="132.14" step="0.01" max="846.94" value="846.94" data-rangeslider>
+                <script type="text/javascript">
+                  
+                  $('#annuite').on('input change', function(){
+                    var list=[] 
+                    update_list(list);
+                    list.push(parseFloat($(this).val()).toFixed(2))
+                    list.sort(function(a,b) { return a - b;});
+                    var x=0;
+                    x=list.indexOf(parseFloat($(this).val()).toFixed(2))
+                    x=x-1
+                    $('#annuitebox').val(list[x])
+                    var str=''
+                    for (j=0;j<list.length;j++){
+                    str += '<option value="'+list[j]+'" />';}
+                    var my_list=document.getElementById("annuitevalues");
+                     my_list.innerHTML = str;        
+                    $('#annuite').val($('#annuitebox').val());
+                    document.getElementById("annuitevalue").innerHTML =$(this).val();
+                    onRangeChange('annuite');
+                    var montsum=0;
+                    var montsum2=0;
+                    montsum2=$('#tauxbox').val()/12;
+                    montsum2=montsum2*$('#typeduree').val();
+                    montsum2=parseFloat('1.0')+parseFloat(montsum2);
+                    montsum2=Math.log(montsum2);
+                    montsum=$('#tauxbox').val()/12;
+                    montsum=montsum*$('#typeduree').val();
+                    montsum= montsum*$('#montantbox').val();
+                    montsum=montsum/$('#annuitebox').val();
+                    montsum=parseFloat('1')-parseFloat(montsum);
+                    montsum=Math.log(montsum);
+                    montsum=montsum/montsum2;
+                    montsum=-montsum;
+                    montsum=Math.ceil(montsum);
+                    $('#dureebox').val(montsum);
+                    $('#duree').val(montsum);
+                    onRangeChange('duree');
+                    document.getElementById("credit").innerHTML =($("#annuitebox").val()*$("#dureebox").val()-$("#montantbox").val()).toFixed(2);
+                  });
+                  $('#annuitebox').keyup(function(e) {
+                    if (e.keyCode == 13) {
+                      if ($(this).val() > $(this).attr('max')*1) {       $(this).val($(this).attr('max'));     }
+                    if ($(this).val() < $(this).attr('min')*1) {       $(this).val($(this).attr('min'));     }
+                      var val = $(this).val().replace(/[^\d.]/g, '');
+                      var list=[] 
+                    update_list(list);
+                    list.push(parseFloat(val).toFixed(2))
+                    list.sort(function(a,b) { return a - b;});
+                    var x=0;
+                    x=list.indexOf(parseFloat(val).toFixed(2))
+                    x=x-1
+                    $('#annuitebox').val(list[x])
+                      $('#annuite').val(list[x]);
+                      onRangeChange('annuite');
+                      document.getElementById("annuitevalue").innerHTML =list[x];
+                      var sum=0;
+                    var sum2=0;
+                    sum2=$('#tauxbox').val()/12;
+                    sum2=sum2*$('#typeduree').val();
+                    sum2=parseFloat('1.0')+parseFloat(sum2);
+                    sum2=Math.log(sum2);
+                    sum=$('#tauxbox').val()/12;
+                    sum=sum*$('#typeduree').val();
+                    sum= sum*$('#montantbox').val();
+                    sum=sum/$('#annuitebox').val();
+                    sum=parseFloat('1')-parseFloat(sum);
+                    sum=Math.log(sum);
+                    sum=sum/sum2;
+                    sum=-sum;
+                    sum=Math.ceil(sum);
+                    $('#dureebox').val(sum);
+                    $('#duree').val(sum)
+                    onRangeChange('duree');
+                    document.getElementById("credit").innerHTML =($("#annuitebox").val()*$("#dureebox").val()-$("#montantbox").val()).toFixed(2);
+                    
+                  }});
+                  </script>
+              </div>
+            </div>
+            </div>
+          </div>
+          <div class="valuetext">
+            <h2 id="typedureetext">mensualite<br></h2><span id="annuitevalue" class="annuitevalue">846.94</span><sup class="bigsup">DH</sup>
+            <h2>Cout de credit:</h2><h4 class="credit"><span id="credit" >163.28</span></h4><sup class="smallsup">DH*</sup>
+            <h2><sup class="smallsup">*hors TVA et frais de dossier</sup></h2>
+          </div>
+            
+        </section>
+
+    </main>
+<datalist id="annuitevalues"></datalist>
+  </body>
+
+  
+</html
